@@ -1,0 +1,110 @@
+<?php
+namespace App;
+
+use App\Task\Exceptions\CanNotAddTaskToSubTaskException;
+use App\Task\Exceptions\TaskNotFoundException;
+use App\Task\InMemoryTask;
+use App\Task\Task;
+use App\User\Exceptions\NotEmptyException;
+use App\User\Exceptions\UserNotFoundException;
+use App\User\Services\InMemoryUser;
+use App\User\User;
+use App\User\Vo\Id;
+
+readonly class UserManageTasks
+{
+
+    public function __construct(
+        private InMemoryUser $inMemoryUser,
+        private InMemoryTask $inMemoryTask
+    )
+    {
+    }
+
+    /**
+     * @throws NotEmptyException
+     * @throws UserNotFoundException
+     * @throws TaskNotFoundException|CanNotAddTaskToSubTaskException
+     */
+    public function userCreateNewTask(
+        User $user ,
+        string $taskTitle ,
+        string $taskDesc,
+        ?Id $parentId): Task
+    {
+        self::checkIfUserIdExistOrThrowException($user);
+        if($parentId){
+            self::checkIfParentIdExistOrThrowException($parentId);
+        }
+        return Task::createTask(
+            $taskTitle,
+            $taskDesc,
+            $user->getUserId(),
+            $parentId
+        );
+    }
+
+    /**
+     * @throws UserNotFoundException
+     */
+    public function userMarkTaskHasFinished(User $user, Task $task):void
+    {
+        self::checkIfUserIdExistOrThrowException($user);
+        $task->markTaskHasFinished();
+        $subTasks = $this->inMemoryTask->getSubTasks($task->getTaskId());
+        foreach ($subTasks as $task){
+            $task->markTaskHasFinished();
+        }
+    }
+
+    /**
+     * @throws UserNotFoundException
+     */
+    private  function checkIfUserIdExistOrThrowException(User $user): void
+    {
+        if (!$this->inMemoryUser->getUserById($user->getUserId())){
+            throw new UserNotFoundException('C\'est utilisateur n\'existe pas');
+        }
+        self::checkIfUserIsLoggedIn($user);
+    }
+
+    /**
+     * @throws TaskNotFoundException
+     * @throws CanNotAddTaskToSubTaskException
+     */
+    private  function checkIfParentIdExistOrThrowException(Id $parentId): void
+    {
+        if (!$this->inMemoryTask->getTaskById($parentId)){
+            throw new TaskNotFoundException('Cette tache n\'existe pas');
+        }
+        self::checkIfParentTaskIsSubTaskOrThrowException($parentId);
+    }
+
+    /**
+     * @throws CanNotAddTaskToSubTaskException
+     */
+    private  function checkIfParentTaskIsSubTaskOrThrowException(Id $parentId): void
+    {
+        $parent = $this->inMemoryTask->getTaskById($parentId);
+        if ($parent and $parent->getParentId()){
+            $ancestorTask = $this->inMemoryTask->getTaskById($parent->getParentId());
+                $ancestorTask->getParentId()?->value() ??
+                throw new CanNotAddTaskToSubTaskException('Impossible d\'ajouter des  taches à une sous tache');
+        }
+    }
+
+    private static function checkIfUserIsLoggedIn(User $user)
+    {
+
+    }
+
+    /**
+     * @throws UserNotFoundException
+     */
+    public function userMarkTasksListHasFinished(User $user, array $tasks): void
+    {
+        foreach ($tasks as $task){
+            $this->userMarkTaskHasFinished($user, $task);
+        }
+    }
+}
