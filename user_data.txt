@@ -1,0 +1,29 @@
+{
+    "user_id": "6491de558c3b4",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "JohnDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "+237 673415289"
+}**********{
+    "user_id": "6491de558c3c0",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "JaneDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "+237 673415289"
+}**********{
+    "user_id": "6491f4c53112d",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "JohnDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "+237 673415289"
+}**********{
+    "user_id": "6491f4c53114c",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "JaneDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "+237 673415289"
+}**********
