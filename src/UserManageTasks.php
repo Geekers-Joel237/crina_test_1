@@ -3,20 +3,20 @@ namespace App;
 
 use App\Task\Exceptions\CanNotAddTaskToSubTaskException;
 use App\Task\Exceptions\TaskNotFoundException;
-use App\Task\InMemoryTask;
 use App\Task\Task;
+use App\Task\TaskRepository;
 use App\User\Exceptions\NotEmptyException;
 use App\User\Exceptions\UserNotFoundException;
-use App\User\Services\InMemoryUser;
 use App\User\User;
+use App\User\UserRepository;
 use App\User\Vo\Id;
 
 readonly class UserManageTasks
 {
 
     public function __construct(
-        private InMemoryUser $inMemoryUser,
-        private InMemoryTask $inMemoryTask
+        private UserRepository $inMemoryUser,
+        private TaskRepository $inMemoryTask
     )
     {
     }

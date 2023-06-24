@@ -4,9 +4,10 @@ namespace App\User\Services;;
 
 
 use App\User\User;
+use App\User\UserRepository;
 use App\User\Vo\Id;
 
-class InMemoryUser
+class InMemoryUser implements UserRepository
 {
     private array $users = [];
     public function __construct()

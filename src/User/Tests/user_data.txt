@@ -190,4 +190,100 @@
     "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
     "telephone": "237-1234-1234",
     "is_logged": false
+}**********{
+    "user_id": "64968b8b259c4",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "JohnDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
+}**********{
+    "user_id": "64968b8b259d0",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "JaneDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
+}**********{
+    "user_id": "64968b8b259db",
+    "first_name": "test",
+    "last_name": "test",
+    "email": "testtest@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
+}**********{
+    "user_id": "64968cb8b9a10",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "JohnDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
+}**********{
+    "user_id": "64968cb8b9a1c",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "JaneDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
+}**********{
+    "user_id": "64968cb8b9a26",
+    "first_name": "test",
+    "last_name": "test",
+    "email": "testtest@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
+}**********{
+    "user_id": "64968cba6e8c2",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "JohnDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
+}**********{
+    "user_id": "64968cba6e8cc",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "JaneDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
+}**********{
+    "user_id": "64968cba6e8d5",
+    "first_name": "test",
+    "last_name": "test",
+    "email": "testtest@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
+}**********{
+    "user_id": "64968cbb9f9ba",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "JohnDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
+}**********{
+    "user_id": "64968cbb9f9c7",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "JaneDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
+}**********{
+    "user_id": "64968cbb9f9d4",
+    "first_name": "test",
+    "last_name": "test",
+    "email": "testtest@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "237-1234-1234",
+    "is_logged": false
 }**********
