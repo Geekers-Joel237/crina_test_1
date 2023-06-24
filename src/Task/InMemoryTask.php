@@ -4,7 +4,7 @@ namespace App\Task;
 
 use App\User\Vo\Id;
 
-class InMemoryTask
+class InMemoryTask implements TaskRepository
 {
     private array $tasks = [];
 

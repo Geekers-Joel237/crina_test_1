@@ -258,6 +258,42 @@ class UserTest extends TestCase
 
     }
 
+    public function test_can_delete_task_and_in_substasks()
+    {
+        $user = $this->buildUserSUT()[0];
+        $this->inMemoryUser->save($user);
+
+        $manager = new UserManageTasks($this->inMemoryUser, $this->inMemoryTask);
+        $task1 = $manager->userCreateNewTask(
+            $user,
+            'Task 1',
+            'Task 1 description',
+            null
+        );
+        $this->inMemoryTask->saveTask($task1);
+        $task2 = $manager->userCreateNewTask(
+            $user,
+            'Task 2',
+            'Task 2 description',
+            $task1->getTaskId()
+        );
+        $this->inMemoryTask->saveTask($task2);
+
+        $task3 = $manager->userCreateNewTask(
+            $user,
+            'Task 3',
+            'Task 3 description',
+            $task1->getTaskId()
+        );
+        $this->inMemoryTask->saveTask($task3);
+        $manager->userMarkTaskHasDeleted($user, $task1);
+        $this->inMemoryTask->saveAll([$task1,$task2,$task3]);
+
+        $this->assertTrue($task1->isDeleted());
+        $this->assertTrue($task2->isDeleted());
+        $this->assertTrue($task3->isDeleted());
+    }
+
     public function test_can_auto_finish_principal_task_when_all_subtasks_is_finished()
     {
         $user = $this->buildUserSUT()[0];

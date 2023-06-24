@@ -107,4 +107,17 @@ readonly class UserManageTasks
             $this->userMarkTaskHasFinished($user, $task);
         }
     }
+
+    /**
+     * @throws UserNotFoundException
+     */
+    public function userMarkTaskHasDeleted(User $user, Task $task)
+    {
+        self::checkIfUserIdExistOrThrowException($user);
+        $task->delete();
+        $subTasks = $this->inMemoryTask->getSubTasks($task->getTaskId());
+        foreach ($subTasks as $task){
+            $task->delete();
+        }
+    }
 }
