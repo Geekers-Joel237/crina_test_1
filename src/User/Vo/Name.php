@@ -31,7 +31,7 @@ class Name
      */
     private function isValid(string $value): void
     {
-        if($value === '') {
+        if($value === '' ) {
             throw new NotEmptyException('Ce nom n\'est pas valide');
         }
     }

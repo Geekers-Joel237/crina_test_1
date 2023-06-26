@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use App\Task\Exceptions\CanNotAddTaskToSubTaskException;
 use App\Task\Exceptions\TaskNotFoundException;
@@ -12,8 +12,8 @@ use App\User\Exceptions\InvalidPhoneNumberException;
 use App\User\Exceptions\NotEmptyException;
 use App\User\Exceptions\UserNotFoundException;
 use App\User\Services\AuthUserService;
-use App\User\Services\SaveUserInFileService;
 use App\User\Services\InMemoryUser;
+use App\User\Services\SaveUserInFileService;
 use App\User\User;
 use App\UserManageTasks;
 use PHPUnit\Framework\TestCase;
@@ -59,6 +59,8 @@ class UserTest extends TestCase
 
     public function test_can_create_user()
     {
+        //Arrange //Act //Assert
+        //When //Given //Then
         $user1 = $this->createCustomUser(
             'John', 'Doe'
         );
