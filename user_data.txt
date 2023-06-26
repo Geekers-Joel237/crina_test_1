@@ -26,4 +26,32 @@
     "email": "JaneDoe@gmail.com",
     "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
     "telephone": "+237 673415289"
+}**********{
+    "user_id": "64959385db9cf",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "JohnDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "+237 673415289"
+}**********{
+    "user_id": "64959385db9fb",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "JaneDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "+237 673415289"
+}**********{
+    "user_id": "649593ab2adb9",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "JohnDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "+237 673415289"
+}**********{
+    "user_id": "649593ab2adc4",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "JaneDoe@gmail.com",
+    "password": "b067aa335a175d6f5466d6ad1782d901d2b344a41bb182fb461ec772c27bd30a",
+    "telephone": "+237 673415289"
 }**********

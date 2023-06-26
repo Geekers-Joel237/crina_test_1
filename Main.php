@@ -120,6 +120,8 @@ try {
 
     $userLogged = $main->main_can_logged_in_user($user1);
 
+    var_dump('azerty');
+
     if (!is_null($userLogged)){
         $main->main_can_save_user_has_logged($userLogged);
         $task1 = $user1->createTask(
