@@ -10,9 +10,10 @@ use App\User\Vo\Email;
 readonly class AuthUserService
 {
     public function __construct(
-        private UserRepository $inMemory,
+        private UserRepository $userRepository,
     )
     {
+
     }
 
     /**
@@ -21,11 +22,11 @@ readonly class AuthUserService
      */
     public function login(string $email, string $password): bool
     {
-        $user = $this->inMemory->byEmail(new Email($email));
+        $user = $this->userRepository->byEmail(new Email($email));
         if (!is_null($user)) {
             if ($user->getPassword()->value() === $password){
                 $user->setIsLoggedIn();
-                $this->inMemory->save($user);
+                $this->userRepository->save($user);
                 return $user->isLoggedIn();
             }
             throw new CredentialsNotMatchException('Email ou Mot de Passe Incorrect');
