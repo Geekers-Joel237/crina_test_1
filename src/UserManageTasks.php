@@ -62,7 +62,7 @@ readonly class UserManageTasks
      */
     private  function checkIfUserIdExistOrThrowException(User $user): void
     {
-        if (!$this->inMemoryUser->getUserById($user->getUserId())){
+        if (!$this->inMemoryUser->byId($user->getUserId())){
             throw new UserNotFoundException('C\'est utilisateur n\'existe pas');
         }
         self::checkIfUserIsLoggedIn($user);
@@ -93,9 +93,14 @@ readonly class UserManageTasks
         }
     }
 
-    private static function checkIfUserIsLoggedIn(User $user)
+    /**
+     * @throws UserNotFoundException
+     */
+    private static function checkIfUserIsLoggedIn(User $user): void
     {
-
+        if (!$user->isLoggedIn()){
+            throw new UserNotFoundException('C\'est Utilisateur n\'est pas connecté ');
+        }
     }
 
     /**
@@ -111,7 +116,7 @@ readonly class UserManageTasks
     /**
      * @throws UserNotFoundException
      */
-    public function userMarkTaskHasDeleted(User $user, Task $task)
+    public function userMarkTaskHasDeleted(User $user, Task $task): void
     {
         self::checkIfUserIdExistOrThrowException($user);
         $task->delete();

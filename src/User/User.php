@@ -131,13 +131,11 @@ class User
     }
 
 
-
     /**
-     * @param bool $isLoggedIn
      */
-    public function setIsLoggedIn(bool $isLoggedIn): void
+    public function setIsLoggedIn(): void
     {
-        $this->isLoggedIn = $isLoggedIn;
+        $this->isLoggedIn = true;
     }
 
     private function setUserId(): void

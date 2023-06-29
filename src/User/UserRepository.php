@@ -2,6 +2,7 @@
 
 namespace App\User;
 
+use App\User\Vo\Email;
 use App\User\Vo\Id;
 
 interface UserRepository
@@ -10,5 +11,6 @@ interface UserRepository
 
     public function users(): array;
 
-    public function getUserById(Id $userId): ?User;
+    public function byId(Id $userId): ?User;
+    public function byEmail(Email $userEmail): ?User;
 }

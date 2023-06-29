@@ -32,7 +32,7 @@ class UserTest extends TestCase
         $this->buildUserSUT();
         $this->inMemoryUser = new InMemoryUser();
         $this->userFileService = new SaveUserInFileService();
-        $this->authService = new AuthUserService();
+        $this->authService = new AuthUserService($this->inMemoryUser);
         $this->inMemoryTask = new InMemoryTask();
     }
 
@@ -127,6 +127,7 @@ class UserTest extends TestCase
         $this->assertNotNull($task);
         $this->assertEquals('Task 1', $task->getTitle()->value());
         $this->assertNotNull( $task->getUserId()->value());
+        $this->assertTrue($user->isLoggedIn());
 
 
     }
@@ -252,7 +253,7 @@ class UserTest extends TestCase
         );
         $this->inMemoryTask->saveTask($task3);
         $manager->userMarkTaskHasFinished($user, $task1);
-        $this->inMemoryTask->saveAll([$task1,$task2,$task3]);
+        $this->inMemoryTask->saveTasks([$task1,$task2,$task3]);
 
         $this->assertEquals(TaskStatus::FINISHED->value(),$task1->getStatus()->value());
         $this->assertEquals(TaskStatus::FINISHED->value(),$task2->getStatus()->value());
@@ -289,7 +290,7 @@ class UserTest extends TestCase
         );
         $this->inMemoryTask->saveTask($task3);
         $manager->userMarkTaskHasDeleted($user, $task1);
-        $this->inMemoryTask->saveAll([$task1,$task2,$task3]);
+        $this->inMemoryTask->saveTasks([$task1,$task2,$task3]);
 
         $this->assertTrue($task1->isDeleted());
         $this->assertTrue($task2->isDeleted());
@@ -325,7 +326,7 @@ class UserTest extends TestCase
         );
         $this->inMemoryTask->saveTask($task3);
         $manager->userMarkTasksListHasFinished($user, [$task2, $task3]);
-        $this->inMemoryTask->saveAll([$task2,$task3]);
+        $this->inMemoryTask->saveTasks([$task2,$task3]);
 
         $this->assertEquals(TaskStatus::FINISHED->value(),$task1->getStatus()->value());
         $this->assertEquals(TaskStatus::FINISHED->value(),$task2->getStatus()->value());
