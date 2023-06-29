@@ -13,7 +13,8 @@ use App\User\Exceptions\NotEmptyException;
 use App\User\Exceptions\UserNotFoundException;
 use App\User\Services\AuthUserService;
 use App\User\Services\InMemoryUser;
-use App\User\Services\SaveUserInFileService;
+use App\User\Services\SaveInFile\SaveUserInFileService;
+use App\User\Services\SaveInFile\Singleton;
 use App\User\Tests\Unit\Builder\Director;
 use App\User\User;
 use App\UserManageTasks;
@@ -24,7 +25,7 @@ class UserTest extends TestCase
     private InMemoryUser $inMemoryUser;
 
     private InMemoryTask $inMemoryTask;
-    private SaveUserInFileService $userFileService;
+    private Singleton $userFileService;
     private AuthUserService $authService;
 
     public function setUp(): void
@@ -90,7 +91,7 @@ class UserTest extends TestCase
 
     public function test_can_save_user_in_file()
     {
-        $response = $this->userFileService->save($this->buildUserSUT());
+        $response = $this->userFileService::getInstance()->save($this->buildUserSUT());
         $this->assertTrue($response);
     }
 
@@ -186,10 +187,39 @@ class UserTest extends TestCase
         $this->assertEquals($task1->getTaskId()->value(),$task2->getParentId()->value());
     }
 
+    /**
+     * @throws NotEmptyException
+     * @throws TaskNotFoundException
+     * @throws UserNotFoundException
+     */
     public function test_can_throw_cannot_add_task_to_sub_task_exception()
     {
         $this->expectException(CanNotAddTaskToSubTaskException::class);
-        list($user, $manager, $task1, $task2, $task3) = $this->extracted();
+        $user = Director::build()->createUser()->isLoggedIn()->user();
+        $this->inMemoryUser->save($user);
+
+        $manager = new UserManageTasks($this->inMemoryUser, $this->inMemoryTask);
+        $task1 = $manager->userCreateNewTask(
+            $user,
+            'Task 1',
+            'Task 1 description',
+            null
+        );
+        $this->inMemoryTask->saveTask($task1);
+        $task2 = $manager->userCreateNewTask(
+            $user,
+            'Task 2',
+            'Task 2 description',
+            $task1->getTaskId()
+        );
+        $this->inMemoryTask->saveTask($task2);
+
+        $task3 = $manager->userCreateNewTask(
+            $user,
+            'Task 3',
+            'Task 3 description',
+            $task2->getTaskId()
+        );
 
     }
 
@@ -250,7 +280,7 @@ class UserTest extends TestCase
 
     public function test_can_auto_finish_principal_task_when_all_subtasks_is_finished()
     {
-        $user = $this->buildUserSUT()[0];
+        $user = Director::build()->createUser()->isLoggedIn()->user();;
         $this->inMemoryUser->save($user);
 
         $manager = new UserManageTasks($this->inMemoryUser, $this->inMemoryTask);
