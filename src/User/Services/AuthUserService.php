@@ -13,7 +13,6 @@ readonly class AuthUserService
         private UserRepository $userRepository,
     )
     {
-
     }
 
     /**
