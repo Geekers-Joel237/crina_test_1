@@ -53,6 +53,7 @@ class User
      * @throws InvalidEmailException
      * @throws InvalidPasswordException
      * @throws InvalidPhoneNumberException
+     * @named-arguments-supported
      */
     public static function createUser(
         string $firstName,

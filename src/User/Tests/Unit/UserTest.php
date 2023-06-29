@@ -14,6 +14,7 @@ use App\User\Exceptions\UserNotFoundException;
 use App\User\Services\AuthUserService;
 use App\User\Services\InMemoryUser;
 use App\User\Services\SaveUserInFileService;
+use App\User\Tests\Unit\Builder\Director;
 use App\User\User;
 use App\UserManageTasks;
 use PHPUnit\Framework\TestCase;
@@ -95,9 +96,7 @@ class UserTest extends TestCase
 
     public function test_can_logged_user()
     {
-        $user1 = $this->createCustomUser(
-            'John', 'Doe'
-        );
+        $user1 = $this->buildUserSUT()[0];
         $this->inMemoryUser->save($user1);
         $response = $this->authService
             ->login($user1->getEmail()->value(),$user1->getPassword()->value());
@@ -113,7 +112,7 @@ class UserTest extends TestCase
      */
     public function test_can_create_task()
     {
-        $user = $this->buildUserSUT()[0];
+        $user = Director::build()->createUser()->isLoggedIn()->user();
         $this->inMemoryUser->save($user);
 
         $manager = new UserManageTasks($this->inMemoryUser, $this->inMemoryTask);
@@ -140,7 +139,7 @@ class UserTest extends TestCase
      */
     public function test_can_save_task_in_memory()
     {
-        $user = $this->buildUserSUT()[0];
+        $user =Director::build()->createUser()->isLoggedIn()->user();
         $this->inMemoryUser->save($user);
 
         $manager = new UserManageTasks($this->inMemoryUser, $this->inMemoryTask);
@@ -164,7 +163,7 @@ class UserTest extends TestCase
      */
     public function test_can_save_task_with_sub_tasks_in_memory()
     {
-        $user = $this->buildUserSUT()[0];
+        $user = Director::build()->createUser()->isLoggedIn()->user();
         $this->inMemoryUser->save($user);
 
         $manager = new UserManageTasks($this->inMemoryUser, $this->inMemoryTask);
@@ -190,31 +189,7 @@ class UserTest extends TestCase
     public function test_can_throw_cannot_add_task_to_sub_task_exception()
     {
         $this->expectException(CanNotAddTaskToSubTaskException::class);
-        $user = $this->buildUserSUT()[0];
-        $this->inMemoryUser->save($user);
-
-        $manager = new UserManageTasks($this->inMemoryUser, $this->inMemoryTask);
-        $task1 = $manager->userCreateNewTask(
-            $user,
-            'Task 1',
-            'Task 1 description',
-            null
-        );
-        $this->inMemoryTask->saveTask($task1);
-        $task2 = $manager->userCreateNewTask(
-            $user,
-            'Task 2',
-            'Task 2 description',
-            $task1->getTaskId()
-        );
-        $this->inMemoryTask->saveTask($task2);
-
-        $task3 = $manager->userCreateNewTask(
-            $user,
-            'Task 3',
-            'Task 3 description',
-            $task2->getTaskId()
-        );
+        list($user, $manager, $task1, $task2, $task3) = $this->extracted();
 
     }
 
@@ -226,31 +201,7 @@ class UserTest extends TestCase
      */
     public function test_can_finished_task_and_his_sub_tasks()
     {
-        $user = $this->buildUserSUT()[0];
-        $this->inMemoryUser->save($user);
-
-        $manager = new UserManageTasks($this->inMemoryUser, $this->inMemoryTask);
-        $task1 = $manager->userCreateNewTask(
-            $user,
-            'Task 1',
-            'Task 1 description',
-            null
-        );
-        $this->inMemoryTask->saveTask($task1);
-        $task2 = $manager->userCreateNewTask(
-            $user,
-            'Task 2',
-            'Task 2 description',
-            $task1->getTaskId()
-        );
-        $this->inMemoryTask->saveTask($task2);
-
-        $task3 = $manager->userCreateNewTask(
-            $user,
-            'Task 3',
-            'Task 3 description',
-            $task1->getTaskId()
-        );
+        list($user, $manager, $task1, $task2, $task3) = $this->extracted();
         $this->inMemoryTask->saveTask($task3);
         $manager->userMarkTaskHasFinished($user, $task1);
         $this->inMemoryTask->saveTasks([$task1,$task2,$task3]);
@@ -263,7 +214,7 @@ class UserTest extends TestCase
 
     public function test_can_delete_task_and_in_substasks()
     {
-        $user = $this->buildUserSUT()[0];
+        $user = Director::build()->createUser()->isLoggedIn()->user();
         $this->inMemoryUser->save($user);
 
         $manager = new UserManageTasks($this->inMemoryUser, $this->inMemoryTask);
@@ -335,6 +286,7 @@ class UserTest extends TestCase
     public function buildUserSUT(): array
     {
         $users = [];
+
         $user1 = $this->createCustomUser(
             'John', 'Doe'
         );
@@ -346,5 +298,42 @@ class UserTest extends TestCase
         );
 
         return $users = [$user1, $user2, $user3];
+    }
+
+    /**
+     * @return array
+     * @throws CanNotAddTaskToSubTaskException
+     * @throws NotEmptyException
+     * @throws TaskNotFoundException
+     * @throws UserNotFoundException
+     */
+    public function extracted(): array
+    {
+        $user = Director::build()->createUser()->isLoggedIn()->user();
+        $this->inMemoryUser->save($user);
+
+        $manager = new UserManageTasks($this->inMemoryUser, $this->inMemoryTask);
+        $task1 = $manager->userCreateNewTask(
+            $user,
+            'Task 1',
+            'Task 1 description',
+            null
+        );
+        $this->inMemoryTask->saveTask($task1);
+        $task2 = $manager->userCreateNewTask(
+            $user,
+            'Task 2',
+            'Task 2 description',
+            $task1->getTaskId()
+        );
+        $this->inMemoryTask->saveTask($task2);
+
+        $task3 = $manager->userCreateNewTask(
+            $user,
+            'Task 3',
+            'Task 3 description',
+            $task1->getTaskId()
+        );
+        return array($user, $manager, $task1, $task2, $task3);
     }
 }
