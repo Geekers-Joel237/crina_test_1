@@ -60,7 +60,7 @@ class InMemoryTask implements TaskRepository
         });
     }
 
-    public function saveAll(array $tasks): void
+    public function saveTasks(array $tasks): void
     {
         foreach ($tasks as $task){
             $this->saveTask($task);
