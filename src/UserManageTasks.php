@@ -52,15 +52,7 @@ readonly class UserManageTasks
     {
         self::checkIfUserIdExistOrThrowException($user);
         $task->markTaskHasFinished();
-        if (!is_null($task->getParentId())){
-            $parentSubTasks = $this->inMemoryTask->getSubTasks($task->getParentId());
-           if (!empty($parentSubTasks)){
-               $sameLevelTasks = array_filter($parentSubTasks, fn(Task $t) => TaskStatus::FINISHED === $t->getStatus() );
-               if (count($sameLevelTasks) === count($parentSubTasks)){
-                   $this->inMemoryTask->getTaskById($task->getParentId())->markTaskHasFinished();
-               }
-           }
-        }
+        $this->checkIfAllSubtasksAreFinishedThenMarkParentTaskHasFinishedToo($task);
         $subTasks = $this->inMemoryTask->getSubTasks($task->getTaskId());
         foreach ($subTasks as $task){
             $task->markTaskHasFinished();
@@ -133,6 +125,53 @@ readonly class UserManageTasks
         $subTasks = $this->inMemoryTask->getSubTasks($task->getTaskId());
         foreach ($subTasks as $task){
             $task->delete();
+        }
+    }
+
+    /**
+     * @param array $sameLevelTasks
+     * @param array $parentSubTasks
+     * @param Task $task
+     * @return void
+     */
+    private function compareSizeBetweenSameLevelTasksArrayAndParentSubTasksArray(array $sameLevelTasks, array $parentSubTasks, Task $task): void
+    {
+        if (count($sameLevelTasks) === count($parentSubTasks)) {
+            $this->markHasFinishedParentTask($task);
+        }
+    }
+
+    /**
+     * @param Task $task
+     * @return void
+     */
+    private function markHasFinishedParentTask(Task $task): void
+    {
+        $this->inMemoryTask->getTaskById($task->getParentId())->markTaskHasFinished();
+    }
+
+    /**
+     * @param Task $task
+     * @return void
+     */
+    private function checkIfAllSubtasksAreFinishedThenMarkParentTaskHasFinishedToo(Task $task): void
+    {
+        if (!is_null($task->getParentId())) {
+            $parentSubTasks = $this->inMemoryTask->getSubTasks($task->getParentId());
+            $this->getSameLevelTasksForComparisonWithParentSubTasks($parentSubTasks, $task);
+        }
+    }
+
+    /**
+     * @param array $parentSubTasks
+     * @param Task $task
+     * @return void
+     */
+    private function getSameLevelTasksForComparisonWithParentSubTasks(array $parentSubTasks, Task $task): void
+    {
+        if (!empty($parentSubTasks)) {
+            $sameLevelTasks = array_filter($parentSubTasks, fn(Task $t) => TaskStatus::FINISHED === $t->getStatus());
+            $this->compareSizeBetweenSameLevelTasksArrayAndParentSubTasksArray($sameLevelTasks, $parentSubTasks, $task);
         }
     }
 }
