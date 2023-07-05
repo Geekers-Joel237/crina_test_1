@@ -62,6 +62,29 @@ readonly class UserManageTasks
     /**
      * @throws UserNotFoundException
      */
+    public function userMarkTasksListHasFinished(User $user, array $tasks): void
+    {
+        foreach ($tasks as $task){
+            $this->userMarkTaskHasFinished($user, $task);
+        }
+    }
+
+    /**
+     * @throws UserNotFoundException
+     */
+    public function userMarkTaskHasDeleted(User $user, Task $task): void
+    {
+        self::checkIfUserIdExistOrThrowException($user);
+        $task->delete();
+        $subTasks = $this->inMemoryTask->getSubTasks($task->getTaskId());
+        foreach ($subTasks as $task){
+            $task->delete();
+        }
+    }
+
+    /**
+     * @throws UserNotFoundException
+     */
     private  function checkIfUserIdExistOrThrowException(User $user): void
     {
         if (!$this->inMemoryUser->byId($user->getUserId())){
@@ -92,39 +115,6 @@ readonly class UserManageTasks
             $ancestorTask = $this->inMemoryTask->getTaskById($parent->getParentId());
                 $ancestorTask->getParentId()?->value() ??
                 throw new CanNotAddTaskToSubTaskException('Impossible d\'ajouter des  taches à une sous tache');
-        }
-    }
-
-    /**
-     * @throws UserNotFoundException
-     */
-    private static function checkIfUserIsLoggedIn(User $user): void
-    {
-        if (!$user->isLoggedIn()){
-            throw new UserNotFoundException('C\'est Utilisateur n\'est pas connecté ');
-        }
-    }
-
-    /**
-     * @throws UserNotFoundException
-     */
-    public function userMarkTasksListHasFinished(User $user, array $tasks): void
-    {
-        foreach ($tasks as $task){
-            $this->userMarkTaskHasFinished($user, $task);
-        }
-    }
-
-    /**
-     * @throws UserNotFoundException
-     */
-    public function userMarkTaskHasDeleted(User $user, Task $task): void
-    {
-        self::checkIfUserIdExistOrThrowException($user);
-        $task->delete();
-        $subTasks = $this->inMemoryTask->getSubTasks($task->getTaskId());
-        foreach ($subTasks as $task){
-            $task->delete();
         }
     }
 
@@ -172,6 +162,16 @@ readonly class UserManageTasks
         if (!empty($parentSubTasks)) {
             $sameLevelTasks = array_filter($parentSubTasks, fn(Task $t) => TaskStatus::FINISHED === $t->getStatus());
             $this->compareSizeBetweenSameLevelTasksArrayAndParentSubTasksArray($sameLevelTasks, $parentSubTasks, $task);
+        }
+    }
+
+    /**
+     * @throws UserNotFoundException
+     */
+    private static function checkIfUserIsLoggedIn(User $user): void
+    {
+        if (!$user->isLoggedIn()){
+            throw new UserNotFoundException('C\'est Utilisateur n\'est pas connecté ');
         }
     }
 }
