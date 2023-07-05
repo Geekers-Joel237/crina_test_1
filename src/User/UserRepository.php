@@ -7,7 +7,7 @@ use App\User\Vo\Id;
 
 interface UserRepository
 {
-    public function save(User $user);
+    public function save(User $user): void;
 
     public function users(): array;
 

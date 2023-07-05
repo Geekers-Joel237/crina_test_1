@@ -7,8 +7,7 @@ use App\User\SaveUserIn;
 class SaveUserInDbService implements SaveUserIn
 {
 
-    public function save(array $users): bool
+    public function save(array $users): void
     {
-        return false;
     }
 }
