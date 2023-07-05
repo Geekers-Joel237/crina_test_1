@@ -10,9 +10,9 @@ interface TaskRepository
 
     public function getTasks(): array;
 
-    public function getTaskById(Id $taskId);
+    public function getTaskById(Id $taskId): ?Task;
 
-    public function getSubTasks(Id $parentId);
+    public function getSubTasks(Id $parentId): array;
 
     public function saveTasks(array $tasks): void;
 }

@@ -5,6 +5,7 @@ use App\Task\Exceptions\CanNotAddTaskToSubTaskException;
 use App\Task\Exceptions\TaskNotFoundException;
 use App\Task\Task;
 use App\Task\TaskRepository;
+use App\Task\TaskStatus;
 use App\User\Exceptions\NotEmptyException;
 use App\User\Exceptions\UserNotFoundException;
 use App\User\User;
@@ -51,6 +52,15 @@ readonly class UserManageTasks
     {
         self::checkIfUserIdExistOrThrowException($user);
         $task->markTaskHasFinished();
+        if (!is_null($task->getParentId())){
+            $parentSubTasks = $this->inMemoryTask->getSubTasks($task->getParentId());
+           if (!empty($parentSubTasks)){
+               $sameLevelTasks = array_filter($parentSubTasks, fn(Task $t) => TaskStatus::FINISHED === $t->getStatus() );
+               if (count($sameLevelTasks) === count($parentSubTasks)){
+                   $this->inMemoryTask->getTaskById($task->getParentId())->markTaskHasFinished();
+               }
+           }
+        }
         $subTasks = $this->inMemoryTask->getSubTasks($task->getTaskId());
         foreach ($subTasks as $task){
             $task->markTaskHasFinished();
